@@ -228,6 +228,33 @@ for (const [key, gamemode] of possibleTemplates) {
     }
 }
 
+/**
+ * 
+ * @param {*} images 
+ * @param {*} totalTiles the total number of tiles to include in this sheet. will fill them with empty space if there arent enough images to fill every tile
+ * @returns 
+ */
+const createTilesFromImages = (images, totalTiles) => {
+    
+    images.map(async (image) => {
+        await toDataURL(image)
+            .then((uri) => {
+                // docDefinition.images.logo = 
+
+                return {
+                    image: uri,
+                    // margin: [40, 20, 0, 0],
+                    // fit: [200, 70]
+                }
+            })
+            .catch((error) => { console.error(error) });
+    })
+
+    imagesNeeded = totaltiles - images.length
+    //TODO fill in empty ones
+
+    return images
+}
 
 
 function handleFileSelect(evt) {
