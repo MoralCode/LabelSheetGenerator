@@ -251,9 +251,7 @@ const createTilesFromImages = (images, totalTiles) => {
 
 function handleFileSelect(evt) {
     let files = evt.target.files; // FileList object
-    console.log(files)
     
-
     for (let f = 0; f < files.length; f++) {
 
         let reader = new FileReader();
@@ -265,7 +263,6 @@ function handleFileSelect(evt) {
         }, false);
 
         const file = files[f]
-        console.log(file)
         // Read in the image file as a data URL.
         reader.readAsDataURL(file)
     }
