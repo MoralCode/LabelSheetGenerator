@@ -270,32 +270,6 @@ function handleFileSelect(evt) {
 
 fileUploadField.addEventListener('change', handleFileSelect, false);
 
-
-const checkBoardSize = () => {
-
-    const tilesNeeded = (boardXElement.value * boardYElement.value) - boardFreeTilesElement.value;
-
-    const available_tiles = label_templates[labelTemplateElement.value].tiles.length;
-    console.log(tilesNeeded)
-    if (tilesNeeded > available_tiles) {
-        // disable the buttons and show a message
-        generateButtonElement.hidden = true;
-        playBoardElement.hidden = true;
-        warningTextElement.innerText = "Your current board settings require more tiles than this game mode has.\n Try checking your board size and free space settings."
-        warningTextElement.hidden = false;
-
-    } else {
-        generateButtonElement.hidden = false;
-        playBoardElement.hidden = false;
-        warningTextElement.hidden = true;
-
-    }
-
-}
-
-labelTemplateElement.onchange = checkBoardSize
-
-
 generateButtonElement.onclick = () => {
 
     _paq.push(['trackEvent', 'Boards', 'Generate', label_templates[labelTemplateElement.value].name, boardCountElement.value]);
