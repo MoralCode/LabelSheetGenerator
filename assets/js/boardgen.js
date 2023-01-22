@@ -19,7 +19,7 @@ function randomizeOptions(rows, columns, values) {
 
     //duplicate values array so we can mutate it and not mess the real one up
     data = Array.from(values);
-    data = shuffle(data);
+    // data = shuffle(data);
     board = []
 
     if (values.length < (rows * columns))
@@ -72,26 +72,6 @@ function insertFreeSpaces(board, freeTileCount) {
         }
     }
     return board
-}
-
-//Copoed from https://stackoverflow.com/a/2450976 
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
 }
 
 //https://stackoverflow.com/a/42916772
