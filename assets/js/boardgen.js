@@ -300,11 +300,11 @@ generateButtonElement.onclick = () => {
 
 
     //add loader
-    image = document.createElement('img')
-    image.src = "assets/media/loader.gif"
-    image.style.display = "block";
-    image.style.margin = "0 auto";
-    replaceInlinePDFWith(image)
+    // image = document.createElement('img')
+    // image.src = "assets/media/loader.gif"
+    // image.style.display = "block";
+    // image.style.margin = "0 auto";
+    // replaceInlinePDFWith(image)
 
     tiles = board_values[gameTypeElement.value].tiles
     custom_img = board_values[gameTypeElement.value].image
