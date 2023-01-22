@@ -236,19 +236,11 @@ for (const [key, gamemode] of possibleTemplates) {
  */
 const createTilesFromImages = (images, totalTiles) => {
     
-    images.map(async (image) => {
-        await toDataURL(image)
-            .then((uri) => {
-                // docDefinition.images.logo = 
-
-                return {
+    images.map((uri) => ({
                     image: uri,
                     // margin: [40, 20, 0, 0],
                     // fit: [200, 70]
-                }
-            })
-            .catch((error) => { console.error(error) });
-    })
+                }));
 
     imagesNeeded = totaltiles - images.length
     //TODO fill in empty ones
