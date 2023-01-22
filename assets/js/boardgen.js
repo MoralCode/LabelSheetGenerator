@@ -248,9 +248,10 @@ function createBoard(width, height, options, freespaces) {
     return newboard
 }
 
+possibleTemplates = Object.entries(label_templates)
+//TODO: sort
 
-
-for (const [key, gamemode] of Object.entries(board_values)) {
+for (const [key, gamemode] of possibleTemplates) {
     console.log(key);
     console.log(gamemode.hasOwnProperty('name'));
     if (gamemode.hasOwnProperty('name')) {
@@ -260,7 +261,7 @@ for (const [key, gamemode] of Object.entries(board_values)) {
         if (gamemode.default) {
             option.selected = true;
         }
-        gameTypeElement.appendChild(option)
+        labelTemplateElement.appendChild(option)
     }
 }
 
