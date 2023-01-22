@@ -244,24 +244,10 @@ function replaceInlinePDFWith(node) {
 
 function createBoard(width, height, options, freespaces) {
     newboard = randomizeOptions(width, height, options);
-    newboard = insertFreeSpaces(newboard, freespaces);
     return newboard
 }
 
-function storeBoardForPlay(board){
-    // Store
-    const boardJSON = {
-        rows: []
-    }
-    for (row in board) {
-        boardJSON.rows.push({
-            cols: board[row]
-        })
-    }
 
-    sessionStorage.setItem(boardSaveKey, JSON.stringify(boardJSON));
-    // console.log(sessionStorage.getItem(boardSaveKey))
-}
 
 for (const [key, gamemode] of Object.entries(board_values)) {
     console.log(key);
@@ -331,18 +317,3 @@ generateButtonElement.onclick = () => {
         );
 }
 
-
-playBoardElement.onclick = () => {
-    _paq.push(['trackEvent', 'Boards', 'Play', board_values[gameTypeElement.value].name, boardCountElement.value]);
-
-    tiles = board_values[gameTypeElement.value].tiles
-
-    storeBoardForPlay(createBoard(boardXElement.value, boardYElement.value, tiles, boardFreeTilesElement.value))
-
-    let playURL = "/play"
-    if (window.location.href.endsWith("/")){
-        playURL = "play"
-    }
-    window.location.href = window.location.href + playURL;
-
-}
