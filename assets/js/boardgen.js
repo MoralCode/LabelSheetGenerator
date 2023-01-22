@@ -1,5 +1,6 @@
 const labelTemplateElement = document.getElementById("labelTemplate")
 const imagesPerLabelElement = document.getElementById("imagesperlabelcount") 
+const fileUploadField = document.getElementById("filefield")
 
 // const boardXElement = document.getElementById("boarddimx")
 // const boardYElement = document.getElementById("boarddimy")
