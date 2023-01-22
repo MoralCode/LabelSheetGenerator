@@ -1,10 +1,11 @@
-const gameTypeElement = document.getElementById("gametype")
-const boardCountElement = document.getElementById("boardcount")
-const boardXElement = document.getElementById("boarddimx")
-const boardYElement = document.getElementById("boarddimy")
-const boardFreeTilesElement = document.getElementById("freetiles")
+const labelTemplateElement = document.getElementById("labelTemplate")
+const imagesPerLabelElement = document.getElementById("imagesperlabelcount") 
+
+// const boardXElement = document.getElementById("boarddimx")
+// const boardYElement = document.getElementById("boarddimy")
+// const boardFreeTilesElement = document.getElementById("freetiles")
 const generateButtonElement = document.getElementById("generate")
-const playBoardElement = document.getElementById("play")
+// const playBoardElement = document.getElementById("play")
 const warningTextElement = document.getElementById("warningText")
 
 /**
