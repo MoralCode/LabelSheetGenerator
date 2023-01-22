@@ -307,11 +307,10 @@ generateButtonElement.onclick = () => {
     // image.style.display = "block";
     // image.style.margin = "0 auto";
     // replaceInlinePDFWith(image)
+    template = label_templates[labelTemplateElement.value]
+    tiles = createTilesFromImages(uploadedImageData, template.rowsPerSheet*template.colsPerSheet)
 
-    tiles = label_templates[labelTemplateElement.value].tiles
-    custom_img = label_templates[labelTemplateElement.value].image
-
-    getPDFTemplate(label_templates[labelTemplateElement.value], tiles)
+    getPDFTemplate(template, tiles)
         .then((template) => pdfMake.createPdf(template).getDataUrl(
             (dataUrl) => {
                 var iframe = document.createElement('iframe');
