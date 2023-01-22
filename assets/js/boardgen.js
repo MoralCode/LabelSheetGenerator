@@ -18,7 +18,7 @@ let uploadedImageData = []
  * @param {*} columns the number of columns the board should have
  * @param {*} values the array of values to randomly pull from
  */
-function createBoard(rows, columns, values) {
+function createSheet(rows, columns, values) {
 
     //duplicate values array so we can mutate it and not mess the real one up
     data = Array.from(values);
@@ -97,7 +97,7 @@ function toDataURL(url) {
     });
 }
 
-function getTableDefenitionFromBoard(board) {
+function getTableDefinitionFromImages(board) {
     //there should be a better way to get the width in pdfmake than
     //just hardcoding the page height and making up an arbitrary number so that it's close enough
     //the 612 comes from the LETTER size in https://github.com/bpampuch/pdfmake/blob/79d9d51e0b5cf5ea4b0491811591ea5aaf15c95b/src/standardPageSizes.js, and the 120 is just a number made up to account for the margins and whatever so that the table appears square when it is used for the height
@@ -152,7 +152,7 @@ function formatBoardText(board) {
     return formattedText
 }
 
-async function getPDFTemplate(quantity, tiles, custom_img) {
+async function getPDFTemplate(template, tiles) {
 
     var docDefinition = {
         pageSize: 'LETTER',
@@ -196,16 +196,12 @@ async function getPDFTemplate(quantity, tiles, custom_img) {
     };
 
     // var doc = new jsPDF("portrait", "pt", "letter")
-
+    quantity = 1 //TODO, calculate how many sheets are needed
     for(i = 0; i < quantity; i++) {
-        newboard = createBoard(boardXElement.value, boardYElement.value, tiles, boardFreeTilesElement.value);
-        docDefinition.content.push(getTableDefenitionFromBoard(newboard));
+        sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, tiles);
+        docDefinition.content.push(createTilesFromImages(sheet));
     }
 
-    //wait for the image to be added first
-    if (custom_img) {
-    }
-    
     return docDefinition
 }
 
@@ -231,6 +227,7 @@ for (const [key, gamemode] of possibleTemplates) {
         labelTemplateElement.appendChild(option)
     }
 }
+
 
 
 function handleFileSelect(evt) {
@@ -262,7 +259,7 @@ const checkBoardSize = () => {
 
     const tilesNeeded = (boardXElement.value * boardYElement.value) - boardFreeTilesElement.value;
 
-    const available_tiles = board_values[gameTypeElement.value].tiles.length;
+    const available_tiles = label_templates[labelTemplateElement.value].tiles.length;
     console.log(tilesNeeded)
     if (tilesNeeded > available_tiles) {
         // disable the buttons and show a message
@@ -280,14 +277,12 @@ const checkBoardSize = () => {
 
 }
 
-boardXElement.onchange = checkBoardSize;
-boardYElement.onchange = checkBoardSize;
-gameTypeElement.onchange = checkBoardSize
+labelTemplateElement.onchange = checkBoardSize
 
 
 generateButtonElement.onclick = () => {
 
-    _paq.push(['trackEvent', 'Boards', 'Generate', board_values[gameTypeElement.value].name, boardCountElement.value]);
+    _paq.push(['trackEvent', 'Boards', 'Generate', label_templates[labelTemplateElement.value].name, boardCountElement.value]);
 
 
     //add loader
@@ -297,10 +292,10 @@ generateButtonElement.onclick = () => {
     // image.style.margin = "0 auto";
     // replaceInlinePDFWith(image)
 
-    tiles = board_values[gameTypeElement.value].tiles
-    custom_img = board_values[gameTypeElement.value].image
+    tiles = label_templates[labelTemplateElement.value].tiles
+    custom_img = label_templates[labelTemplateElement.value].image
 
-    getPDFTemplate(boardCountElement.value, tiles, custom_img)
+    getPDFTemplate(label_templates[labelTemplateElement.value], tiles)
         .then((template) => pdfMake.createPdf(template).getDataUrl(
             (dataUrl) => {
                 var iframe = document.createElement('iframe');
