@@ -15,7 +15,7 @@ const warningTextElement = document.getElementById("warningText")
  * @param {*} columns the number of columns the board should have
  * @param {*} values the array of values to randomly pull from
  */
-function randomizeOptions(rows, columns, values) {
+function createBoard(rows, columns, values) {
 
     //duplicate values array so we can mutate it and not mess the real one up
     data = Array.from(values);
@@ -222,11 +222,6 @@ function replaceInlinePDFWith(node) {
     const main = document.getElementsByTagName("main")[0]
     node.id = "pdfinline"
     main.replaceChild(node, document.getElementById('pdfinline'))
-}
-
-function createBoard(width, height, options, freespaces) {
-    newboard = randomizeOptions(width, height, options);
-    return newboard
 }
 
 possibleTemplates = Object.entries(label_templates)
