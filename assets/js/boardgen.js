@@ -9,6 +9,9 @@ const generateButtonElement = document.getElementById("generate")
 // const playBoardElement = document.getElementById("play")
 const warningTextElement = document.getElementById("warningText")
 
+
+let uploadedImageData = []
+
 /**
  * returns a 2d array representing a randomized arrangement of board tiles.
  * @param {*} rows the number of rows the board should have
@@ -201,18 +204,6 @@ async function getPDFTemplate(quantity, tiles, custom_img) {
 
     //wait for the image to be added first
     if (custom_img) {
-        await toDataURL(custom_img)
-            .then((uri) => {
-                docDefinition.images.logo = uri
-
-                docDefinition.header.push({
-                    image: 'logo',
-                    margin: [40, 20, 0, 0],
-                    fit: [200, 70]
-                })
-
-            })
-            .catch((error) => { console.error(error) });
     }
     
     return docDefinition
@@ -241,6 +232,30 @@ for (const [key, gamemode] of possibleTemplates) {
     }
 }
 
+
+function handleFileSelect(evt) {
+    let files = evt.target.files; // FileList object
+    console.log(files)
+    
+
+    for (let f = 0; f < files.length; f++) {
+
+        let reader = new FileReader();
+
+        reader.addEventListener("load", () => {
+            // convert image file to base64 string
+            console.log(reader.result);
+            uploadedImageData.push(reader.result)
+        }, false);
+
+        const file = files[f]
+        console.log(file)
+        // Read in the image file as a data URL.
+        reader.readAsDataURL(file)
+    }
+}
+
+fileUploadField.addEventListener('change', handleFileSelect, false);
 
 
 const checkBoardSize = () => {
