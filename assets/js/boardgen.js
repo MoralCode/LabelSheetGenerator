@@ -236,7 +236,7 @@ const createTilesFromImages = (images, totalTiles, imagesPerLabel, template) => 
 
     let chunked_images = chunk_array(images, imagesPerLabel)
 
-    const processedimgs = chunked_images.map((tile) => createTileFromImages(tile, template))
+    const processedimgs = chunked_images.map((tile) => createTileFromImages(tile, template, imagesPerLabel))
 
     let tilesNeeded = totalTiles - processedimgs.length
 
@@ -251,9 +251,9 @@ const createTilesFromImages = (images, totalTiles, imagesPerLabel, template) => 
  * create a single tile from the provided images (either one or multiple stacked up)
  * @param {*} images an array of data-uri strings containing image data 
  */
-const createTileFromImages = (images, template) => {
+const createTileFromImages = (images, template, targetSize=0) => {
 
-    if (images.length == 1) {
+    if (images.length == 1 && targetSize == 0) {
         return {
             image: images[0],
             width: template.colWidthIn * IN_TO_PT_FACTOR, // inches to points, multiply by the ppi, which i guess is 72
@@ -277,7 +277,10 @@ const createTileFromImages = (images, template) => {
                     // fit: [200, 70]
                 }
             )
-
+        }
+        var needsItems = data.stack.length < targetSize
+        if (needsItems) {
+            data.stack.push({ height: '*', text: '' })
         }
         return data
     }
