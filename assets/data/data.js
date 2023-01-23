@@ -2,7 +2,7 @@ label_templates = {
     avery6576: {
         name: "Avery 6576",
         default: true,
-        borders:true, //will cause some distortion/shifting of itemsas you move away from the top left corner. for debugging purposes only.
+        borders: false, //will cause some distortion/shifting of itemsas you move away from the top left corner. for debugging purposes only.
         rowHeightIn: 1.25,
         colWidthIn: 1.75,
         rowSpacingIn: 0,
