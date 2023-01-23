@@ -61,6 +61,21 @@ function toDataURL(url) {
     });
 }
 
+function zip(array1, array2)  {
+    array3 = new Array();
+
+    for (var i = 0; i < Math.max(array1.length, array2.length); i++) {
+        if (array1.length > i){
+            array3.push(array1[i]);
+        }
+        if (array2.length > i) {
+            array3.push(array2[i]);
+        }
+    }
+    return array3
+
+}
+
 function getTableDefinitionFromImages(board, template) {
     //there should be a better way to get the width in pdfmake than
     //just hardcoding the page height and making up an arbitrary number so that it's close enough
