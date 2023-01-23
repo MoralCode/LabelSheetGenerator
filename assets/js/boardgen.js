@@ -143,7 +143,7 @@ function getTableDefinitionFromImages(board, template) {
 }
 
 
-async function getPDFTemplate(template, tiles) {
+async function getPDFTemplate(template, imagedata) {
 
     var docDefinition = {
         pageSize: 'LETTER',
@@ -166,9 +166,12 @@ async function getPDFTemplate(template, tiles) {
         ],
     };
 
-    // var doc = new jsPDF("portrait", "pt", "letter")
-    quantity = 1 //TODO, calculate how many sheets are needed
-    for(i = 0; i < quantity; i++) {
+    labelsPerSheet = template.rowsPerSheet * template.colsPerSheet
+    numberOfSheets = Math.ceil(tiles.length/labelsPerSheet)
+
+    for (i = 0; i < numberOfSheets; i++) {
+        tiles = createTilesFromImages(imagedata.slice(i * labelsPerSheet, (i + 1) * labelsPerSheet), template.rowsPerSheet * template.colsPerSheet, template)
+
         sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, tiles);
         docDefinition.content.push(getTableDefinitionFromImages(sheet, template));
     }
@@ -270,9 +273,8 @@ generateButtonElement.onclick = () => {
     // image.style.margin = "0 auto";
     // replaceInlinePDFWith(image)
     template = label_templates[labelTemplateElement.value]
-    tiles = createTilesFromImages(uploadedImageData, template.rowsPerSheet*template.colsPerSheet, template)
 
-    getPDFTemplate(template, tiles)
+    getPDFTemplate(template, uploadedImageData)
         .then((template) => pdfMake.createPdf(template).getDataUrl(
             (dataUrl) => {
                 var iframe = document.createElement('iframe');
