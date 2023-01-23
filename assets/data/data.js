@@ -9,8 +9,8 @@ label_templates = {
         rowsPerSheet: 8,
         colsPerSheet: 4,
         pageTopMarginIn:0.5,
-        pageLeftMarginIn:0.56,
-        pageBottomMarginIn:0.42,
+        pageLeftMarginIn:0.556,
+        pageBottomMarginIn:0.417,
         pageRightMarginIn:0.31,
     }
 }
