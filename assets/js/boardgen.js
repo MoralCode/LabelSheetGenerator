@@ -175,7 +175,6 @@ function handleFileSelect(evt) {
 
         reader.addEventListener("load", () => {
             // convert image file to base64 string
-            console.log(reader.result);
             uploadedImageData.push(reader.result)
         }, false);
 
