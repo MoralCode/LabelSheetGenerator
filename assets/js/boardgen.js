@@ -96,9 +96,11 @@ function zip(array1, array2)  {
 
 }
 
-function chunk(array, chunk_size) {
+//this behaves weirdly if chunk_size is a string
+function chunk_array(array, chunk_size) {
+    chunk_size = parseInt(chunk_size)
     var chunked_array = [];
-    for (i = 0; i < array.length; i += chunk_size) {
+    for (let i = 0; i < array.length; i += chunk_size) {
         chunked_array.push(array.slice(i, i + chunk_size));
     }
     return chunked_array
@@ -174,16 +176,14 @@ async function getPDFTemplate(template, imagedata, imagesPerLabel) {
         ],
     };
 
-    labelsPerSheet = template.rowsPerSheet * template.colsPerSheet
-    imagesPerSheet = labelsPerSheet * imagesPerLabel
-    numberOfSheets = Math.ceil(tiles.length/labelsPerSheet)
+    let labelsPerSheet = template.rowsPerSheet * template.colsPerSheet
+    let imagesPerSheet = labelsPerSheet * imagesPerLabel
 
-    chunked_imagedata = chunk(imagedata, imagesPerSheet)
+    let chunked_imagedata = chunk_array(imagedata, imagesPerSheet)
+    for (let sheet_imagedata of chunked_imagedata) {
 
-    for (sheet_imagedata in chunked_imagedata)
-
-        tiles = createTilesFromImages(sheet_imagedata, labelsPerSheet, imagesPerLabel, template)
-        sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, tiles);
+        let tiles = createTilesFromImages(sheet_imagedata, labelsPerSheet, imagesPerLabel, template)
+        let sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, tiles);
         docDefinition.content.push(getTableDefinitionFromImages(sheet, template));
     }
 
@@ -234,7 +234,7 @@ function getBlankTile(template) {
  */
 const createTilesFromImages = (images, totalTiles, imagesPerLabel, template) => {
 
-    let chunked_images = chunk(images, imagesPerLabel)
+    let chunked_images = chunk_array(images, imagesPerLabel)
 
     const processedimgs = chunked_images.map((tile) => createTileFromImages(tile, template))
 
@@ -266,7 +266,7 @@ const createTileFromImages = (images, template) => {
             stack: []
         }
 
-        for (label_img_data of images) {
+        for (let label_img_data of images) {
         
             data.stack.push(
                 {
@@ -316,7 +316,7 @@ generateButtonElement.onclick = () => {
     // replaceInlinePDFWith(image)
     template = label_templates[labelTemplateElement.value]
 
-    getPDFTemplate(template, uploadedImageData)
+    getPDFTemplate(template, uploadedImageData, parseInt(imagesPerLabelElement.value))
         .then((template) => pdfMake.createPdf(template).getDataUrl(
             (dataUrl) => {
                 var iframe = document.createElement('iframe');
