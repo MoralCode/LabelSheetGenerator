@@ -143,7 +143,7 @@ function getTableDefinitionFromImages(board, template) {
 }
 
 
-async function getPDFTemplate(template, imagedata) {
+async function getPDFTemplate(template, imagedata, imagesPerLabel) {
 
     var docDefinition = {
         pageSize: 'LETTER',
@@ -167,11 +167,12 @@ async function getPDFTemplate(template, imagedata) {
     };
 
     labelsPerSheet = template.rowsPerSheet * template.colsPerSheet
+    imagesPerSheet = labelsPerSheet * imagesPerLabel
     numberOfSheets = Math.ceil(tiles.length/labelsPerSheet)
 
     for (i = 0; i < numberOfSheets; i++) {
-        tiles = createTilesFromImages(imagedata.slice(i * labelsPerSheet, (i + 1) * labelsPerSheet), template.rowsPerSheet * template.colsPerSheet, template)
 
+        tiles = createTilesFromImages(imagedata.slice(i * imagesPerSheet, (i + 1) * imagesPerSheet), labelsPerSheet, imagesPerLabel, template)
         sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, tiles);
         docDefinition.content.push(getTableDefinitionFromImages(sheet, template));
     }
@@ -221,7 +222,7 @@ function getBlankTile(template) {
  * @param {*} totalTiles the total number of tiles to include in this sheet. will fill them with empty space if there arent enough images to fill every tile
  * @returns 
  */
-const createTilesFromImages = (images, totalTiles, template) => {
+const createTilesFromImages = (images, totalTiles, imagesPerLabel, template) => {
     
     const processedimgs = images.map((uri) => ({
                     image: uri,
