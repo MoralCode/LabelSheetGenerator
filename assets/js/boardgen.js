@@ -199,7 +199,7 @@ generateButtonElement.onclick = () => {
     // image.style.margin = "0 auto";
     // replaceInlinePDFWith(image)
     template = label_templates[labelTemplateElement.value]
-    tiles = createTilesFromImages(uploadedImageData, template.rowsPerSheet*template.colsPerSheet)
+    tiles = createTilesFromImages(uploadedImageData, template.rowsPerSheet*template.colsPerSheet, template)
 
     getPDFTemplate(template, tiles)
         .then((template) => pdfMake.createPdf(template).getDataUrl(
