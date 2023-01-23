@@ -87,31 +87,6 @@ function getTableDefinitionFromImages(board, template) {
     }
 }
 
-function formatBoardText(board) {
-    formattedText = []
-
-    for (r = 0; r < board.length; r++) {
-        row = []
-        for (c = 0; c < board[0].length; c++) {
-            row[c] = {
-                stack: [
-                    { text: board[r][c].title, style: 'boardCellMainText' }
-                ],
-                style: 'boardCell'
-            }
-
-            // add the descriptions if present
-            if (board[r][c].hasOwnProperty("detail")){
-                row[c].stack.push(
-                    { text: board[r][c].detail, style: 'boardCellDetailText' }
-                )
-            }
-        }
-        formattedText[r] = row
-    }
-
-    return formattedText
-}
 
 async function getPDFTemplate(template, tiles) {
 
