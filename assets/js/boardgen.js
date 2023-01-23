@@ -192,7 +192,9 @@ function getBlankTile(template) {
         stack: [
             Object.assign({}, {
                 text: "",
-                width: template.colWidthIn * IN_TO_PT_FACTOR
+                width: template.colWidthIn * IN_TO_PT_FACTOR,
+                height: template.rowHeightIn * IN_TO_PT_FACTOR,
+                margin: [0, 0, 0, 0],
             })
         ]
     });
