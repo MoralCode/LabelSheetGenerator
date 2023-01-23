@@ -151,7 +151,12 @@ async function getPDFTemplate(template, tiles) {
         content: [],
         footer: [],
         styles: {},
-        pageMargins: [template.pageLeftMarginIn * IN_TO_PT_FACTOR, template.pageTopMarginIn * IN_TO_PT_FACTOR, template.pageRightMarginIn * IN_TO_PT_FACTOR, template.pageBottomMarginIn * IN_TO_PT_FACTOR],
+        pageMargins: [
+            template.pageLeftMarginIn * IN_TO_PT_FACTOR,
+            template.pageTopMarginIn * IN_TO_PT_FACTOR,
+            template.pageRightMarginIn * IN_TO_PT_FACTOR,
+            template.pageBottomMarginIn * IN_TO_PT_FACTOR
+        ],
     };
 
     // var doc = new jsPDF("portrait", "pt", "letter")
