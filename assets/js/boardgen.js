@@ -111,7 +111,7 @@ async function getPDFTemplate(template, tiles) {
     quantity = 1 //TODO, calculate how many sheets are needed
     for(i = 0; i < quantity; i++) {
         sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, tiles);
-        docDefinition.content.push(createTilesFromImages(sheet));
+        docDefinition.content.push(getTableDefinitionFromImages(sheet, template));
     }
 
     return docDefinition
