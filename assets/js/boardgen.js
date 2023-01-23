@@ -2,6 +2,9 @@ const labelTemplateElement = document.getElementById("labelTemplate")
 const imagesPerLabelElement = document.getElementById("imagesperlabelcount") 
 const fileUploadField = document.getElementById("filefield")
 
+
+const IN_TO_PT_FACTOR = 72;
+
 // const boardXElement = document.getElementById("boarddimx")
 // const boardYElement = document.getElementById("boarddimy")
 // const boardFreeTilesElement = document.getElementById("freetiles")
@@ -126,6 +129,7 @@ async function getPDFTemplate(template, tiles) {
         images: {},
         styles: {
         },
+        pageMargins: [template.pageTopMarginIn * IN_TO_PT_FACTOR, template.pageLeftMarginIn * IN_TO_PT_FACTOR, template.pageBottomMarginIn * IN_TO_PT_FACTOR, template.pageRightMarginIn * IN_TO_PT_FACTOR],
     };
 
     // var doc = new jsPDF("portrait", "pt", "letter")

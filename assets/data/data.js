@@ -8,5 +8,9 @@ label_templates = {
         colSpacing: 0,
         rowsPerSheet: 8,
         colsPerSheet: 4,
+        pageTopMarginIn:0.5,
+        pageLeftMarginIn:0.56,
+        pageBottomMarginIn:0.42,
+        pageRightMarginIn:0.31,
     }
 }
