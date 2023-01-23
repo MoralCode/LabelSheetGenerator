@@ -200,10 +200,7 @@ const createTilesFromImages = (images, totalTiles, template) => {
     imagesNeeded = totalTiles - images.length
 
     for (let i = 0; i < imagesNeeded; i++) {
-        processedimgs.push({
-            stack: [
-                { text: "" }
-            ]})
+        processedimgs.push(getBlankTile(template))
         
     }
 
