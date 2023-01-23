@@ -146,23 +146,26 @@ for (const [key, gamemode] of possibleTemplates) {
  * @param {*} totalTiles the total number of tiles to include in this sheet. will fill them with empty space if there arent enough images to fill every tile
  * @returns 
  */
-const createTilesFromImages = (images, totalTiles) => {
+const createTilesFromImages = (images, totalTiles, template) => {
     
-    images.map((uri) => ({
+    const processedimgs = images.map((uri) => ({
                     image: uri,
+                    width: template.colWidthIn * IN_TO_PT_FACTOR // inches to points, multiply by the ppi, which i guess is 72
                     // margin: [40, 20, 0, 0],
                     // fit: [200, 70]
                 }));
 
     imagesNeeded = totalTiles - images.length
-    //TODO fill in empty ones
-    //  {
-//     stack: [
-//         { text: board[r][c].title, style: 'boardCellMainText' }
-//     ],
-//         style: 'boardCell'
-// }
-    return images
+
+    for (let i = 0; i < imagesNeeded; i++) {
+        processedimgs.push({
+            stack: [
+                { text: "" }
+            ]})
+        
+    }
+
+    return processedimgs
 }
 
 
