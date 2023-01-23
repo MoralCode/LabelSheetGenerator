@@ -211,6 +211,7 @@ const createTilesFromImages = (images, totalTiles, template) => {
     const processedimgs = images.map((uri) => ({
                     image: uri,
                     width: template.colWidthIn * IN_TO_PT_FACTOR, // inches to points, multiply by the ppi, which i guess is 72
+                    height: template.rowHeightIn * IN_TO_PT_FACTOR,
                     margin: [0, 0, 0, 0],
                     // fit: [200, 70]
                 }));
