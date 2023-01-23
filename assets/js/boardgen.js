@@ -98,10 +98,6 @@ async function getPDFTemplate(template, tiles) {
             return [
                 ]
         },
-        pageBreakBefore: function (currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
-            return "columns" in currentNode && previousNodesOnPage.length > 1;
-        },
-        images: {},
         styles: {
         },
         pageMargins: [template.pageTopMarginIn * IN_TO_PT_FACTOR, template.pageLeftMarginIn * IN_TO_PT_FACTOR, template.pageBottomMarginIn * IN_TO_PT_FACTOR, template.pageRightMarginIn * IN_TO_PT_FACTOR],
