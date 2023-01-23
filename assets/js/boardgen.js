@@ -106,7 +106,27 @@ function getTableDefinitionFromImages(board, template) {
     //this contains a workaround to center the table.
     //see https://github.com/bpampuch/pdfmake/issues/72
     return {
-        layout: 'noBorders', // optional, 
+        layout: {
+            hLineWidth: function (i, node) { return 0; },
+            vLineWidth: function (i) { return 0; },
+            hLineColor: function (i) { return '#aaa'; },
+            paddingLeft: function (i) { return 0; },
+            paddingRight: function (i, node) { return 0; },
+            paddingTop: function (i, node) { return 0; },
+            paddingBottom: function (i, node) { return 0; },
+            hLineStyle: function (i, node) {
+                if (i === 0 || i === node.table.body.length) {
+                    return null;
+                }
+                return { dash: { length: 10, space: 4 } };
+            },
+            vLineStyle: function (i, node) {
+                if (i === 0 || i === node.table.widths.length) {
+                    return null;
+                }
+                return { dash: { length: 4 } };
+            },
+        }, // optional, 
         width: 'auto',
         table: {
             // headers are automatically repeated if the table spans over multiple pages
