@@ -149,12 +149,8 @@ async function getPDFTemplate(template, tiles) {
         pageSize: 'LETTER',
         header: [],
         content: [],
-        footer: function (currentPage, pageCount) {
-            return [
-                ]
-        },
-        styles: {
-        },
+        footer: [],
+        styles: {},
         pageMargins: [template.pageLeftMarginIn * IN_TO_PT_FACTOR, template.pageTopMarginIn * IN_TO_PT_FACTOR, template.pageRightMarginIn * IN_TO_PT_FACTOR, template.pageBottomMarginIn * IN_TO_PT_FACTOR],
     };
 
