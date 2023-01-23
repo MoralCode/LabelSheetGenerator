@@ -171,6 +171,17 @@ for (const [key, gamemode] of possibleTemplates) {
     }
 }
 
+function getBlankTile(template) {
+    return Object.assign({}, {
+        stack: [
+            Object.assign({}, {
+                text: "",
+                width: template.colWidthIn * IN_TO_PT_FACTOR
+            })
+        ]
+    });
+}
+
 /**
  * 
  * @param {*} images 
