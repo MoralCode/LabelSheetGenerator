@@ -251,7 +251,7 @@ const createTilesFromImages = (images, totalTiles, imagesPerLabel, template) => 
  * create a single tile from the provided images (either one or multiple stacked up)
  * @param {*} images an array of data-uri strings containing image data 
  */
-const createTileFromImages = (images, template, targetSize=0) => {
+const createTileFromImages = (images, template, targetSize=0, paddingPt=0) => {
 
     if (images.length == 1 && targetSize == 0) {
         return {
@@ -276,6 +276,11 @@ const createTileFromImages = (images, template, targetSize=0) => {
                     // fit: [200, 70]
                 }
             )
+            
+            if (paddingPt > 0 && label_img_data != images[images.length - 1]){
+                data.stack.push({ height: paddingPt, text: '' })
+            }
+
         }
         var needsItems = data.stack.length < targetSize
         if (needsItems) {
