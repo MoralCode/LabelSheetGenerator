@@ -178,9 +178,11 @@ async function getPDFTemplate(template, imagedata, imagesPerLabel) {
     imagesPerSheet = labelsPerSheet * imagesPerLabel
     numberOfSheets = Math.ceil(tiles.length/labelsPerSheet)
 
-    for (i = 0; i < numberOfSheets; i++) {
+    chunked_imagedata = chunk(imagedata, imagesPerSheet)
 
-        tiles = createTilesFromImages(imagedata.slice(i * imagesPerSheet, (i + 1) * imagesPerSheet), labelsPerSheet, imagesPerLabel, template)
+    for (sheet_imagedata in chunked_imagedata)
+
+        tiles = createTilesFromImages(sheet_imagedata, labelsPerSheet, imagesPerLabel, template)
         sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, tiles);
         docDefinition.content.push(getTableDefinitionFromImages(sheet, template));
     }
@@ -231,23 +233,54 @@ function getBlankTile(template) {
  * @returns 
  */
 const createTilesFromImages = (images, totalTiles, imagesPerLabel, template) => {
-    
-    const processedimgs = images.map((uri) => ({
-                    image: uri,
+
+    let chunked_images = chunk(images, imagesPerLabel)
+
+    const processedimgs = chunked_images.map((tile) => createTileFromImages(tile, template))
+
+    let tilesNeeded = totalTiles - processedimgs.length
+
+    for (let i = 0; i < tilesNeeded; i++) {
+        processedimgs.push(getBlankTile(template))
+    }
+
+    return processedimgs
+}
+
+/**
+ * create a single tile from the provided images (either one or multiple stacked up)
+ * @param {*} images an array of data-uri strings containing image data 
+ */
+const createTileFromImages = (images, template) => {
+
+    if (images.length == 1) {
+        return {
+            image: images[0],
+            width: template.colWidthIn * IN_TO_PT_FACTOR, // inches to points, multiply by the ppi, which i guess is 72
+            height: template.rowHeightIn * IN_TO_PT_FACTOR,
+            margin: [0, 0, 0, 0],
+            // fit: [200, 70]
+        }
+    } else {
+        var data = {
+            stack: []
+        }
+
+        for (label_img_data of images) {
+        
+            data.stack.push(
+                {
+                    image: label_img_data,
                     width: template.colWidthIn * IN_TO_PT_FACTOR, // inches to points, multiply by the ppi, which i guess is 72
                     height: template.rowHeightIn * IN_TO_PT_FACTOR,
                     margin: [0, 0, 0, 0],
                     // fit: [200, 70]
-                }));
+                }
+            )
 
-    imagesNeeded = totalTiles - images.length
-
-    for (let i = 0; i < imagesNeeded; i++) {
-        processedimgs.push(getBlankTile(template))
-        
+        }
+        return data
     }
-
-    return processedimgs
 }
 
 
