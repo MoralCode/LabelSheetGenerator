@@ -96,6 +96,14 @@ function zip(array1, array2)  {
 
 }
 
+function chunk(array, chunk_size) {
+    var chunked_array = [];
+    for (i = 0; i < array.length; i += chunk_size) {
+        chunked_array.push(array.slice(i, i + chunk_size));
+    }
+    return chunked_array
+}
+
 function getTableDefinitionFromImages(board, template) {
     //there should be a better way to get the width in pdfmake than
     //just hardcoding the page height and making up an arbitrary number so that it's close enough
