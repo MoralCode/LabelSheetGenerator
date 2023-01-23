@@ -125,17 +125,7 @@ async function getPDFTemplate(template, tiles) {
         },
         images: {},
         styles: {
-            boardCellMainText: {
-                // fontSize: 20,//pt
-                bold: true,
-                alignment: 'center'
-            },
-            boardCellDetailText: {
-                fontSize: 10,//pt
-                italics: true,
-                alignment: 'center'
-            }
-        }
+        },
     };
 
     // var doc = new jsPDF("portrait", "pt", "letter")
