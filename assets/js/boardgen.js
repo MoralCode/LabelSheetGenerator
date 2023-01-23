@@ -136,7 +136,7 @@ function getTableDefinitionFromImages(board, template) {
             // heights: Array(board[0][0].length).fill('*'),//Array(board.length).fill(availableWidth / board.length),
             alignment: 'center',
             body: injectSpacingColumns(board, template),
-            margin: [0, 0, 0, 0]
+            margin: [0,0,0,0]
         },
         margin: [0,0,0,0]
     }
@@ -147,10 +147,17 @@ async function getPDFTemplate(template, tiles) {
 
     var docDefinition = {
         pageSize: 'LETTER',
+        pageOrientation: 'portrait',
         header: [],
         content: [],
         footer: [],
         styles: {},
+        layout: {
+            paddingLeft: function (i) { return 0; },
+            paddingRight: function (i, node) { return 0; },
+            paddingTop: function (i, node) { return 0; },
+            paddingBottom: function (i, node) { return 0; }
+        },
         pageMargins: [
             template.pageLeftMarginIn * IN_TO_PT_FACTOR,
             template.pageTopMarginIn * IN_TO_PT_FACTOR,
