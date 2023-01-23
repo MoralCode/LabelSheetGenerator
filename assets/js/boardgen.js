@@ -189,7 +189,6 @@ fileUploadField.addEventListener('change', handleFileSelect, false);
 
 generateButtonElement.onclick = () => {
 
-    _paq.push(['trackEvent', 'Boards', 'Generate', label_templates[labelTemplateElement.value].name, boardCountElement.value]);
 
 
     //add loader
