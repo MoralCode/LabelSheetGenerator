@@ -23,8 +23,7 @@ let uploadedImageData = []
  */
 function createSheet(rows, columns, values) {
 
-    //duplicate values array so we can mutate it and not mess the real one up
-    data = Array.from(values);
+    data = values;
     // data = shuffle(data);
     board = []
 
