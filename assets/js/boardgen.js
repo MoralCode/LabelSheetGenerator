@@ -107,8 +107,8 @@ function getTableDefinitionFromImages(board, template) {
     //see https://github.com/bpampuch/pdfmake/issues/72
     return {
         layout: {
-            hLineWidth: function (i, node) { return 0; },
-            vLineWidth: function (i) { return 0; },
+            hLineWidth: function (i, node) { return template.borders? .5 : 0; },
+            vLineWidth: function (i) { return template.borders ? .5 : 0; },
             hLineColor: function (i) { return '#aaa'; },
             paddingLeft: function (i) { return 0; },
             paddingRight: function (i, node) { return 0; },
