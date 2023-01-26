@@ -59,6 +59,11 @@ main {
     margin: 0 auto;
 }
 
+
+.labelGroup {
+    border: 1px dashed black;
+}
+
 table#boardTable {
     width: 90%;
     margin: 0 auto;
