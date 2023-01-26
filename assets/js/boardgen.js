@@ -330,7 +330,7 @@ function createLabelGroup(parentContainer, first = false) {
     let groupTemplate = parentContainer
     if (!first) {
         // duplicate elements first child
-        groupTemplate = parentContainer.firstChild.cloneNode(true);
+        groupTemplate = parentContainer.children[0].cloneNode(true);
         // this.height = height;
         // this.width = width;
         parentContainer.appendChild(groupTemplate)
