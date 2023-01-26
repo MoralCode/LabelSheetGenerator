@@ -33,9 +33,9 @@ let uploadedImageData = []
  * @param {*} columns the number of columns the board should have
  * @param {*} values the array of values to randomly pull from
  */
-function createSheet(rows, columns, values) {
+function createSheet(rows, columns, values, template) {
 
-    data = values;
+    let data = values;
     // data = shuffle(data);
     board = []
 
@@ -46,7 +46,7 @@ function createSheet(rows, columns, values) {
     for (r = 0; r < rows; r++) {
         row = []
         for (c = 0; c < columns; c++) {
-            row[c] = data.shift(); //https://stackoverflow.com/a/29606016
+            row[c] = data.shift() ?? getBlankTile(template); //https://stackoverflow.com/a/29606016
         }
         board[r] = row
     }
@@ -193,7 +193,7 @@ async function getPDFTemplate(template, allTiles) {
     let chunked_imagedata = chunk_array(allTiles, labelsPerSheet)
     for (let sheet_tiles of chunked_imagedata) {
 
-        let sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, sheet_tiles);
+        let sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, sheet_tiles, template);
 
         docDefinition.content.push(getTableDefinitionFromImages(sheet, template));
     }
@@ -337,7 +337,7 @@ function createLabelGroup(parentContainer, first = false) {
     }
     let labelGroup = new LabelGroup(groupTemplate) 
 
-    groupTemplate.addEventListener('change', (e) => handleFileSelect(e, labelGroup), false);
+    groupTemplate.querySelectorAll(".filefield")[0].addEventListener('change', (e) => handleFileSelect(e, labelGroup), false);
 
     //delete button
     groupTemplate.getElementsByTagName("button")[0].onclick = (e) => {
@@ -391,8 +391,7 @@ generateButtonElement.onclick = () => {
 
     let template = label_templates[labelTemplateElement.value]
     // let imagedata = processLabelGroups(labelGroups, template)
-    let allTiles = labelGroups.map((group) => group.processLabelImages(template)).reduce((a, b) => Array.concat(a, b))
-
+    let allTiles = labelGroups.map((group) => group.processLabelImages(template)).reduce((a, b) => a.concat(b))
 
     getPDFTemplate(template, allTiles)//uploadedImageData, parseInt(imagesPerLabelElement.value)
         .then((template) => pdfMake.createPdf(template).getDataUrl(
