@@ -165,7 +165,7 @@ function getTableDefinitionFromImages(board, template) {
 }
 
 
-async function getPDFTemplate(template, labeldata) {
+async function getPDFTemplate(template, allTiles) {
 
     var docDefinition = {
         pageSize: 'LETTER',
@@ -188,8 +188,15 @@ async function getPDFTemplate(template, labeldata) {
         ],
     };
 
-    
-    docDefinition.content = labeldata;
+    let labelsPerSheet = template.rowsPerSheet * template.colsPerSheet
+
+    let chunked_imagedata = chunk_array(allTiles, labelsPerSheet)
+    for (let sheet_tiles of chunked_imagedata) {
+
+        let sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, sheet_tiles);
+
+        docDefinition.content.push(getTableDefinitionFromImages(sheet, template));
+    }
 
     return docDefinition
 }
@@ -294,31 +301,6 @@ const createTileFromImages = (images, template, targetImagesPerLabel=0, paddingP
     }
 }
 
-const processLabelGroup = (labelGroup, template) => {
-    let labelsPerSheet = template.rowsPerSheet * template.colsPerSheet
-    let imagesPerSheet = labelsPerSheet * labelGroup.getImagesPerLabelCount()
-    let imagedata = labelGroup.uploadedImageData
-
-    let labelGroupTableData = []
-
-
-    let chunked_imagedata = chunk_array(imagedata, imagesPerSheet)
-    for (let sheet_imagedata of chunked_imagedata) {
-
-        let tiles = createTilesFromImages(sheet_imagedata, labelsPerSheet, imagesPerLabel, template)
-        let sheet = createSheet(template.rowsPerSheet, template.colsPerSheet, tiles);
-
-        labelGroupTableData.push(getTableDefinitionFromImages(sheet, template));
-    }
-    return labelGroupTableData
-}
-
-
-const processLabelGroups = (labelGroups, template) => {
-  
-    return labelGroups.map((labelGroup) => processLabelGroup(labelGroup, template)).reduce( (a,b) => Array.concat(a,b))
-}
-
 /**
  * handles selecting uploaded files, decoding them to DataURL format, and saving them in a list
  * @param {*} evt 
@@ -379,6 +361,13 @@ class LabelGroup {
     getImagesPerLabelCount() {
         return parseInt(this.imagesPerLabelElement.value)
     }
+
+    processLabelImages(template) {
+
+        let chunked_images = chunk_array(this.uploadedImageData, this.imagesPerLabelElement.value)
+        let tiles = chunked_images.map((imageset) => createTileFromImages(imageset, template, this.imagesPerLabelElement.value, 0))
+        return tiles
+    }
 }
 
 labelGroups.push(createLabelGroup(labelGroupContainerElement, first = true))
@@ -401,10 +390,11 @@ generateButtonElement.onclick = () => {
     // replaceInlinePDFWith(image)
 
     let template = label_templates[labelTemplateElement.value]
-    let imagedata = processLabelGroups(labelGroups, template)
+    // let imagedata = processLabelGroups(labelGroups, template)
+    let allTiles = labelGroups.map((group) => group.processLabelImages(template)).reduce((a, b) => Array.concat(a, b))
 
 
-    getPDFTemplate(template, imagedata)//uploadedImageData, parseInt(imagesPerLabelElement.value)
+    getPDFTemplate(template, allTiles)//uploadedImageData, parseInt(imagesPerLabelElement.value)
         .then((template) => pdfMake.createPdf(template).getDataUrl(
             (dataUrl) => {
                 var iframe = document.createElement('iframe');
