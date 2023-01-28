@@ -415,7 +415,7 @@ generateButtonElement.onclick = () => {
     let skipLabelsCount = parseInt(labelSkipElement.value)
     if (skipLabelsCount > 0) {
         for (let i = 0; i < skipLabelsCount; i++) {
-            skipLabels.push(getBlankTile(template, false))
+            skipLabels.push(getBlankTile(template, true))
         }
     }
     allTiles = skipLabels.concat(allTiles)
