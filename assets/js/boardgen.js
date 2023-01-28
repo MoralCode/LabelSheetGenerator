@@ -175,6 +175,9 @@ function getTableDefinitionFromImages(board, template) {
 function getPDFTemplate(template, allTiles) {
 
     var docDefinition = {
+        info: {
+            creator: "LabelSheetGenerator <https://github.com/MoralCode/LabelSheetGenerator> instance located at " + window.location.href,
+        },
         pageSize: 'LETTER',
         pageOrientation: 'portrait',
         header: [],
