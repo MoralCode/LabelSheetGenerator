@@ -2,6 +2,10 @@ const labelTemplateElement = document.getElementById("labelTemplate")
 
 const labelSkipElement = document.getElementById("skiplabels")
 
+
+const labelPdfFilenameElement = document.getElementById("filename")
+
+
 // const imagesPerLabelElement = document.getElementById("imagesperlabelcount") 
 // const fileUploadField = document.getElementById("filefield")
 
@@ -16,6 +20,7 @@ let labelGroups = []
 
 
 const IN_TO_PT_FACTOR = 72;
+const DEFAULT_PDF_FILENAME_PREFIX = "generatedlabels_"
 
 // const boardXElement = document.getElementById("boarddimx")
 // const boardYElement = document.getElementById("boarddimy")
@@ -378,6 +383,10 @@ class LabelGroup {
 
 labelGroups.push(createLabelGroup(labelGroupContainerElement, first = true))
 
+let datestamp = (new Date()).toISOString().substring(0, "2023-01-28".length)
+labelPdfFilenameElement.value = DEFAULT_PDF_FILENAME_PREFIX + datestamp + "_1.pdf"
+
+labelPdfFilenameElement.size = labelPdfFilenameElement.value.length
 
 
 newLabelGroupButtonElement.onclick = () => {
@@ -407,13 +416,36 @@ generateButtonElement.onclick = () => {
     }
     allTiles = skipLabels.concat(allTiles)
 
-    getPDFTemplate(template, allTiles)//uploadedImageData, parseInt(imagesPerLabelElement.value)
-        .then((template) => pdfMake.createPdf(template).getDataUrl(
-            (dataUrl) => {
-                var iframe = document.createElement('iframe');
-                iframe.src = dataUrl;                
-                replaceInlinePDFWith(iframe)
-            })
-        );
+    let filename = labelPdfFilenameElement.value
+
+    if (!filename.toLowerCase().endsWith(".pdf")){
+        labelPdfFilenameElement.value += ".pdf"
+        filename += ".pdf"
+    }
+    
+    pdfMake.createPdf(getPDFTemplate(template, allTiles)).download(filename);
+
+    //default name, no previous exports since page load
+    if (filename.startsWith(DEFAULT_PDF_FILENAME_PREFIX) && filename.endsWith("Z.pdf")) {
+        filename = filename.substring(0, filename.length - ".pdf".length)
+        filename += "_1"
+        filename += ".pdf"
+        labelPdfFilenameElement.value = filename
+
+    } else if (filename.startsWith(DEFAULT_PDF_FILENAME_PREFIX) && filename.includes("Z_") && filename.endsWith(".pdf")) {
+        //there was an export already since page load
+        filename = filename.substring(0, filename.length - ".pdf".length)
+
+        suffix = filename.substring(filename.lastIndexOf("_")+1, filename.length)
+        //remove suffix number from filename
+        let suffixStrLength = suffix.length
+        filename = filename.substring(0, filename.length - suffixStrLength)
+
+        let suffix = parseInt(suffix)
+        suffix += 1
+        filename += suffix
+        filename += ".pdf"
+        labelPdfFilenameElement.value = filename
+    } 
 }
 
