@@ -30,8 +30,6 @@ const generateButtonElement = document.getElementById("generate")
 const warningTextElement = document.getElementById("warningText")
 
 
-let uploadedImageData = []
-
 /**
  * returns a 2d array representing a randomized arrangement of board tiles.
  * @param {*} rows the number of rows the board should have
@@ -174,7 +172,7 @@ function getTableDefinitionFromImages(board, template) {
 }
 
 
-async function getPDFTemplate(template, allTiles) {
+function getPDFTemplate(template, allTiles) {
 
     var docDefinition = {
         pageSize: 'LETTER',
@@ -242,6 +240,8 @@ function getBlankTile(template, fillSpace=false) {
             Object.assign({}, {
                 text: fillSpace ? " ": "",
                 lineHeight: 0,
+                width: w,
+                height:h,
                 margin: fillSpace? [w/2, h/2, w/2, h/2]: [0, 0, 0, 0],
             })
         ]
@@ -304,6 +304,7 @@ const createTileFromImages = (images, template, targetImagesPerLabel=0, paddingP
             }
 
         }
+        //if there arent as many label images as we were told to expect, add a variable padding below the label so that they arent stretched to fill the height 
         var needsItems = data.stack.length < targetImagesPerLabel
         if (needsItems) {
             data.stack.push({ height: '*', text: '' })
@@ -363,7 +364,6 @@ function createLabelGroup(parentContainer, first = false) {
 class LabelGroup {
 
     constructor(labelGroupElement) {
-        console.log(labelGroupElement);
         this.fileUploadField = labelGroupElement.querySelectorAll(".filefield")[0]
         this.imagesPerLabelElement = labelGroupElement.querySelectorAll(".imagesperlabelcount")[0] 
         this.uploadedImageData = []
