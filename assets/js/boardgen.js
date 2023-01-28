@@ -310,7 +310,7 @@ const createTileFromImages = (images, template, targetImagesPerLabel=0, paddingP
  */
 function handleFileSelect(evt, labelGroup) {
     let files = evt.target.files; // FileList object
-    
+    labelGroup.clearImageData()
     for (let f = 0; f < files.length; f++) {
 
         let reader = new FileReader();
@@ -369,6 +369,10 @@ class LabelGroup {
         let chunked_images = chunk_array(this.uploadedImageData, this.imagesPerLabelElement.value)
         let tiles = chunked_images.map((imageset) => createTileFromImages(imageset, template, this.imagesPerLabelElement.value, 0))
         return tiles
+    }
+
+    clearImageData() {
+        this.uploadedImageData = []
     }
 }
 
