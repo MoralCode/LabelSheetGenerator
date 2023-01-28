@@ -11,6 +11,7 @@ js:
         <p>To use:</p>
         <ol>
             <li>Select one of the label sheet templates (contributions welcome if yours isnt listed)</li>
+            <li>If you are printing on an already-partly-used sheet, set the number of labels to skip (first page only) so you arent printing where a label has already been used (counting left to right, top to bottom)</li>
             <li>Upload your images (it can be slow or broken if you try and do more than ~1 sheet at a time, so be aware)</li>
             <li>If your labels are smaller and you want to fit more than one per label, use the images per label field to specify how many labels to vertically stack in each label.</li>
             <li>If you want to combine full size and half-size labels onto the same printout to use an entire sheet, create another label group with your second set of images. This group can have a different images per label setting than other groups</li>
@@ -24,6 +25,10 @@ js:
             <label>Select Label Template: </label>
             <select id="labelTemplate"></select>
         </div>
+        <label>Number of Labels to Skip: </label>
+        <span>
+            <input id="skiplabels" type="number" value="0" />
+        </span>
         <div id="labelGroupContainer">
             <div class="labelGroup">
                 <div class="option">

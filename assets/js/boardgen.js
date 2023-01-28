@@ -1,6 +1,6 @@
 const labelTemplateElement = document.getElementById("labelTemplate")
 
-
+const labelSkipElement = document.getElementById("skiplabels")
 
 // const imagesPerLabelElement = document.getElementById("imagesperlabelcount") 
 // const fileUploadField = document.getElementById("filefield")
@@ -224,14 +224,16 @@ for (const [key, gamemode] of possibleTemplates) {
     }
 }
 
-function getBlankTile(template) {
+function getBlankTile(template, fillSpace=false) {
+
+    let w = template.colWidthIn * IN_TO_PT_FACTOR
+    let h = template.rowHeightIn * IN_TO_PT_FACTOR
     return Object.assign({}, {
         stack: [
             Object.assign({}, {
-                text: "",
-                width: template.colWidthIn * IN_TO_PT_FACTOR,
-                height: template.rowHeightIn * IN_TO_PT_FACTOR,
-                margin: [0, 0, 0, 0],
+                text: fillSpace ? " ": "",
+                lineHeight: 0,
+                margin: fillSpace? [w/2, h/2, w/2, h/2]: [0, 0, 0, 0],
             })
         ]
     });
@@ -392,6 +394,14 @@ generateButtonElement.onclick = () => {
     let template = label_templates[labelTemplateElement.value]
     // let imagedata = processLabelGroups(labelGroups, template)
     let allTiles = labelGroups.map((group) => group.processLabelImages(template)).reduce((a, b) => a.concat(b))
+    let skipLabels = [];
+    let skipLabelsCount = parseInt(labelSkipElement.value)
+    if (skipLabelsCount > 0) {
+        for (let i = 0; i < skipLabelsCount; i++) {
+            skipLabels.push(getBlankTile(template, false))
+        }
+    }
+    allTiles = skipLabels.concat(allTiles)
 
     getPDFTemplate(template, allTiles)//uploadedImageData, parseInt(imagesPerLabelElement.value)
         .then((template) => pdfMake.createPdf(template).getDataUrl(
