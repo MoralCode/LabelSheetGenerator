@@ -11,7 +11,6 @@ const labelPdfFilenameElement = document.getElementById("filename")
 
 
 const labelGroupContainerElement = document.getElementById("labelGroupContainer")
-// const labelGroupElement = document.getElementById("labelGroup")
 
 const newLabelGroupButtonElement = document.getElementById("newlabelgroup")
 
