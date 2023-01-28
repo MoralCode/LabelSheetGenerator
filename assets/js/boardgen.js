@@ -78,6 +78,10 @@ function injectSpacingColumns(board, template) {
     return newboard
 }
 
+function countCharsInString(string, char) {
+    return (string.match(new RegExp(char, "g")) || []).length
+}
+
 //https://stackoverflow.com/a/42916772
 function toDataURL(url) {
     return new Promise(
@@ -425,23 +429,15 @@ generateButtonElement.onclick = () => {
     
     pdfMake.createPdf(getPDFTemplate(template, allTiles)).download(filename);
 
-    //default name, no previous exports since page load
-    if (filename.startsWith(DEFAULT_PDF_FILENAME_PREFIX) && filename.endsWith("Z.pdf")) {
-        filename = filename.substring(0, filename.length - ".pdf".length)
-        filename += "_1"
-        filename += ".pdf"
-        labelPdfFilenameElement.value = filename
-
-    } else if (filename.startsWith(DEFAULT_PDF_FILENAME_PREFIX) && filename.includes("Z_") && filename.endsWith(".pdf")) {
-        //there was an export already since page load
+    if (filename.startsWith(DEFAULT_PDF_FILENAME_PREFIX) && countCharsInString(filename, "_") == 2 && filename.endsWith(".pdf")) {
         filename = filename.substring(0, filename.length - ".pdf".length)
 
-        suffix = filename.substring(filename.lastIndexOf("_")+1, filename.length)
+        let suffix = filename.substring(filename.lastIndexOf("_")+1, filename.length)
         //remove suffix number from filename
         let suffixStrLength = suffix.length
         filename = filename.substring(0, filename.length - suffixStrLength)
 
-        let suffix = parseInt(suffix)
+        suffix = parseInt(suffix)
         suffix += 1
         filename += suffix
         filename += ".pdf"
