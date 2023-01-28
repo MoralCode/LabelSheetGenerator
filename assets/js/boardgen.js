@@ -356,10 +356,18 @@ function createLabelGroup(parentContainer, first = false) {
 
     //delete button
     groupTemplate.getElementsByTagName("button")[0].onclick = (e) => {
-        e.parentNode.parentNode.removeChild(e.parentNode);
-        //TODO: remove from LabelGroups list
+        if (!first) {
+            let labelGroupElement = e.target.parentNode.parentNode
+            
+            labelGroupElement.parentNode.removeChild(labelGroupElement);
 
-        // labelGroup
+            labelGroups = labelGroups.filter((val, index, arr) => val.sourceElement != labelGroupElement)
+        } else {
+            //user deleted the first and only label group that all the others are copied from. With the current design this is unrecoverable without a page reload. therefore its easter egg time :P
+            generateButtonElement.onclick = () => {
+                alert("Seriously?! What did you expect was going to happen?")
+            }
+        }
     }
     return labelGroup
 }
@@ -367,6 +375,7 @@ function createLabelGroup(parentContainer, first = false) {
 class LabelGroup {
 
     constructor(labelGroupElement) {
+        this.sourceElement = labelGroupElement
         this.fileUploadField = labelGroupElement.querySelectorAll(".filefield")[0]
         this.imagesPerLabelElement = labelGroupElement.querySelectorAll(".imagesperlabelcount")[0] 
         this.uploadedImageData = []
