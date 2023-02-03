@@ -124,6 +124,14 @@ function chunk_array(array, chunk_size) {
     return chunked_array
 }
 
+function clone_array_elements (array, numberOfTimes) {
+    if (array.length > 1){
+        return array.map((a) => Array(numberOfTimes).fill(a)).reduce((a,b) => a.concat(b));
+    } else {
+        return Array(numberOfTimes).fill(array[0])
+    }
+}
+
 function getTableDefinitionFromImages(board, template) {
     //there should be a better way to get the width in pdfmake than
     //just hardcoding the page height and making up an arbitrary number so that it's close enough
@@ -377,6 +385,7 @@ class LabelGroup {
         this.sourceElement = labelGroupElement
         this.fileUploadField = labelGroupElement.querySelectorAll(".filefield")[0]
         this.imagesPerLabelElement = labelGroupElement.querySelectorAll(".imagesperlabelcount")[0] 
+        this.groupQuantityElement = labelGroupElement.querySelectorAll(".groupquantity")[0]
         this.uploadedImageData = []
     }
 
@@ -384,9 +393,14 @@ class LabelGroup {
         return parseInt(this.imagesPerLabelElement.value)
     }
 
-    processLabelImages(template) {
+    getGroupQuantity() {
+        return parseInt(this.groupQuantityElement.value)
+    }
 
-        let chunked_images = chunk_array(this.uploadedImageData, this.imagesPerLabelElement.value)
+    processLabelImages(template) {
+        //apply quantity value
+        let expanded_array = this.getGroupQuantity() == 1 ? this.uploadedImageData : clone_array_elements(this.uploadedImageData, this.getGroupQuantity())
+        let chunked_images = chunk_array(expanded_array, this.imagesPerLabelElement.value)
         let tiles = chunked_images.map((imageset) => createTileFromImages(imageset, template, this.imagesPerLabelElement.value, 0))
         return tiles
     }
