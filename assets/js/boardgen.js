@@ -410,7 +410,7 @@ newLabelGroupButtonElement.onclick = () => {
 
 generateButtonElement.onclick = () => {
 
-
+    _paq.push(['trackEvent', 'Sheets', 'Generate', label_templates[labelTemplateElement.value].name]);
 
     //add loader
     // image = document.createElement('img')
