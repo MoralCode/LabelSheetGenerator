@@ -13,5 +13,7 @@ label_templates = {
         pageLeftMarginIn:0.468,//0.556,
         pageBottomMarginIn:0.42,
         pageRightMarginIn:0.556,//0.31,
+        pagePaperSize: 'LETTER',
+        pageOrientation: 'portrait'
     }
 }
