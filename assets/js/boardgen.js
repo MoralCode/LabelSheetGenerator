@@ -283,7 +283,7 @@ const createTilesFromImages = (images, totalTiles, imagesPerLabel, template) => 
  * create a single tile from the provided images (either one or multiple stacked up)
  * @param {*} images an array of data-uri strings containing image data 
  */
-const createTileFromImages = (images, template, targetImagesPerLabel=0, paddingPt=0) => {
+const createTileFromImages = (images, template, targetImagesPerLabel=0, arrangement="verticalstack", paddingPt=0) => {
 
     if (images.length == 1 && targetImagesPerLabel == 0) {
         return {
@@ -293,7 +293,7 @@ const createTileFromImages = (images, template, targetImagesPerLabel=0, paddingP
             margin: [0, 0, 0, 0],
             // fit: [200, 70]
         }
-    } else {
+    } else if(arrangement =="verticalstack"){
         var data = {
             stack: []
         }
@@ -318,6 +318,47 @@ const createTileFromImages = (images, template, targetImagesPerLabel=0, paddingP
         var needsItems = data.stack.length < targetImagesPerLabel
         if (needsItems) {
             data.stack.push({ height: '*', text: '' })
+        }
+        return data
+    } else if (arrangement == "tile"){
+        let dimensionsize = Math.ceil(Math.sqrt(targetImagesPerLabel))
+
+         var data = {
+            columns: []
+        }
+        // pad with blank images until perfectly divisible by targetImagesPerLabel
+        while (images.length % targetImagesPerLabel != 0){
+            images.push("blank")
+            console.log("adding blank image")
+        }
+        let image_cols = chunk_array(images, dimensionsize)
+
+        for (let index = 0; index < dimensionsize; index++) {
+            let tile = {
+                width: "50%",
+                stack: []
+            }
+            for (let label_img_data of image_cols[index]) {
+                if (label_img_data != "blank") {
+                    tile.stack.push(
+                        {
+                            image: label_img_data,
+                            width: template.colWidthIn/dimensionsize * IN_TO_PT_FACTOR, // inches to points, multiply by the ppi, which i guess is 72
+                            margin: [0, 0, 0, 0],
+                            // fit: [200, 70]
+                        }
+                    )
+                } else {
+                    tile.stack.push(getBlankTile(template, width=template.colWidthIn/dimensionsize, height=template.rowHeightIn/dimensionsize, true))
+                }
+                
+                if (paddingPt > 0 && label_img_data != images[images.length - 1]){
+                    data.stack.push({ height: paddingPt, text: '' })
+                }
+            }
+            console.log(tile)
+
+            data.columns.push(tile)
         }
         return data
     }
@@ -385,6 +426,7 @@ class LabelGroup {
         this.sourceElement = labelGroupElement
         this.fileUploadField = labelGroupElement.querySelectorAll(".filefield")[0]
         this.imagesPerLabelElement = labelGroupElement.querySelectorAll(".imagesperlabelcount")[0] 
+        this.multiLabelArrangementElement = labelGroupElement.querySelectorAll(".multilabelarrangementstyle")[0] 
         this.groupQuantityElement = labelGroupElement.querySelectorAll(".groupquantity")[0]
         this.uploadedImageData = []
     }
@@ -401,7 +443,7 @@ class LabelGroup {
         //apply quantity value
         let expanded_array = this.getGroupQuantity() == 1 ? this.uploadedImageData : clone_array_elements(this.uploadedImageData, this.getGroupQuantity())
         let chunked_images = chunk_array(expanded_array, this.imagesPerLabelElement.value)
-        let tiles = chunked_images.map((imageset) => createTileFromImages(imageset, template, this.imagesPerLabelElement.value, 0))
+        let tiles = chunked_images.map((imageset) => createTileFromImages(imageset, template, this.imagesPerLabelElement.value, this.multiLabelArrangementElement.value, 0))
         return tiles
     }
 
