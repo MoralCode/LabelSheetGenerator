@@ -109,6 +109,7 @@ div.option {
 
 div.option > * {
     flex: 0 0 auto;
+    margin: .2em;
 }
 
 div.option > button {
