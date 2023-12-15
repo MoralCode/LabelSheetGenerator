@@ -241,10 +241,10 @@ for (const [key, gamemode] of possibleTemplates) {
     }
 }
 
-function getBlankTile(template, fillSpace=false) {
+function getBlankTile(template, width=undefined, height=undefined, fillSpace=false) {
 
-    let w = template.colWidthIn * IN_TO_PT_FACTOR
-    let h = template.rowHeightIn * IN_TO_PT_FACTOR
+    let w = (width ?? template.colWidthIn) * IN_TO_PT_FACTOR
+    let h = (height?? template.rowHeightIn) * IN_TO_PT_FACTOR
     return Object.assign({}, {
         stack: [
             Object.assign({}, {
