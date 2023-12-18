@@ -339,6 +339,7 @@ const createTileFromImages = (images, template, targetImagesPerLabel=0, arrangem
                 stack: []
             }
             for (let label_img_data of image_cols[index]) {
+                //padTo() may be useful here somehow? maybe process all the images and then add the blanks?
                 if (label_img_data != "blank") {
                     tile.stack.push(
                         {
@@ -481,6 +482,7 @@ generateButtonElement.onclick = () => {
     let skipLabels = [];
     let skipLabelsCount = parseInt(labelSkipElement.value)
     if (skipLabelsCount > 0) {
+        // TODO: refactor into a padTo()?
         for (let i = 0; i < skipLabelsCount; i++) {
             skipLabels.push(getBlankTile(template, true))
         }
